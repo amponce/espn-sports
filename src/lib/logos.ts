@@ -32,18 +32,18 @@ export const leagueLogos: Record<string, string> = {
   // MMA
   ufc: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/ufc.png',
 
-  // Golf
-  pga: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/pga.png',
-  lpga: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/lpga.png',
+  // Golf (using actual ESPN golf logo URLs)
+  pga: 'https://a.espncdn.com/redesign/assets/img/sport-logo-pga.png',
+  lpga: 'https://a.espncdn.com/redesign/assets/img/sport-logo-pga.png',
 
   // Racing
-  f1: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/f1.png',
-  nascar: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nascar.png',
-  indycar: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/indycar.png',
+  f1: 'https://a.espncdn.com/redesign/assets/img/sport-logo-f1.png',
+  nascar: 'https://a.espncdn.com/redesign/assets/img/sport-logo-nascar.png',
+  indycar: 'https://a.espncdn.com/redesign/assets/img/sport-logo-indycar.png',
 
-  // Tennis
-  atp: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/atp.png',
-  wta: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/wta.png',
+  // Tennis (using sport icons as fallback)
+  atp: 'https://a.espncdn.com/redesign/assets/img/sport-logo-tennis.png',
+  wta: 'https://a.espncdn.com/redesign/assets/img/sport-logo-tennis.png',
 };
 
 // Sport logos (generic sport icons)
@@ -54,7 +54,7 @@ export const sportLogos: Record<string, string> = {
   hockey: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nhl.png',
   soccer: 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/23.png',
   mma: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/ufc.png',
-  golf: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/pga.png',
-  racing: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/f1.png',
-  tennis: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/atp.png',
+  golf: 'https://a.espncdn.com/redesign/assets/img/sport-logo-pga.png',
+  racing: 'https://a.espncdn.com/redesign/assets/img/sport-logo-f1.png',
+  tennis: 'https://a.espncdn.com/redesign/assets/img/sport-logo-tennis.png',
 };
