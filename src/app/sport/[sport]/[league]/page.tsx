@@ -1,7 +1,6 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { getScoreboard, SPORTS_CONFIG, SportKey, getTeamLogo, formatGameTime, isGameLive, Game } from '@/lib/espn-api';
+import { getScoreboard, SPORTS_CONFIG, SportKey, getTeamLogo, formatGameTime, Game } from '@/lib/espn-api';
 import { ScoreboardClient } from './ScoreboardClient';
 import { leagueLogos } from '@/lib/logos';
 
@@ -51,50 +50,51 @@ export default async function LeaguePage({ params, searchParams }: Props) {
   );
 
   return (
-    <main className="min-h-screen bg-gray-900 text-white">
-      <header className="bg-gradient-to-r from-red-700 to-red-900 py-6 px-4">
-        <div className="max-w-7xl mx-auto">
-          <Link href={`/sport/${sport}`} className="text-red-200 hover:text-white text-sm mb-2 inline-block">
-            &larr; Back to {sportConfig.name}
+    <main className="min-h-screen bg-black text-white">
+      {/* Modern header */}
+      <header className="border-b border-neutral-800">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <Link href={`/sport/${sport}`} className="text-neutral-500 hover:text-white text-xs mb-3 inline-flex items-center gap-1 transition-colors">
+            <span>&larr;</span> {sportConfig.name}
           </Link>
           <div className="flex items-center gap-4">
             {leagueLogos[league] ? (
               <img
                 src={leagueLogos[league]}
                 alt={leagueConfig.name}
-                className="w-16 h-16 object-contain"
+                className="w-12 h-12 object-contain"
               />
             ) : (
-              <div className="w-16 h-16 bg-gray-700 rounded-lg flex items-center justify-center text-2xl font-bold">
+              <div className="w-12 h-12 bg-neutral-800 rounded-lg flex items-center justify-center text-lg font-bold text-neutral-400">
                 {leagueConfig.name.slice(0, 3)}
               </div>
             )}
             <div>
-              <h1 className="text-4xl font-bold">{leagueConfig.name}</h1>
-              <p className="text-red-200">Scoreboard</p>
+              <h1 className="text-2xl font-bold tracking-tight">{leagueConfig.name}</h1>
+              <p className="text-neutral-500 text-sm">Scoreboard</p>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Navigation tabs */}
-        <div className="flex gap-4 mb-8 border-b border-gray-700">
+        <div className="tab-nav mb-6">
           <Link
             href={`/sport/${sport}/${league}`}
-            className="pb-2 px-4 border-b-2 border-red-500 text-white font-semibold"
+            className="tab-item active"
           >
-            Scoreboard
+            Scores
           </Link>
           <Link
             href={`/sport/${sport}/${league}/teams`}
-            className="pb-2 px-4 border-b-2 border-transparent text-gray-400 hover:text-white"
+            className="tab-item"
           >
             Teams
           </Link>
           <Link
             href={`/sport/${sport}/${league}/news`}
-            className="pb-2 px-4 border-b-2 border-transparent text-gray-400 hover:text-white"
+            className="tab-item"
           >
             News
           </Link>
@@ -111,11 +111,11 @@ export default async function LeaguePage({ params, searchParams }: Props) {
         {/* Live Games */}
         {liveGames.length > 0 && (
           <section className="mb-8">
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
-              Live Now
+            <h2 className="section-header flex items-center gap-2">
+              <span className="w-2 h-2 bg-red-500 rounded-full live-pulse"></span>
+              Live
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {liveGames.map((game) => (
                 <GameCard key={game.id} game={game} sport={sport} league={league} isLive />
               ))}
@@ -126,8 +126,8 @@ export default async function LeaguePage({ params, searchParams }: Props) {
         {/* Upcoming Games */}
         {upcomingGames.length > 0 && (
           <section className="mb-8">
-            <h2 className="text-xl font-bold mb-4">Upcoming</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <h2 className="section-header">Upcoming</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {upcomingGames.map((game) => (
                 <GameCard key={game.id} game={game} sport={sport} league={league} />
               ))}
@@ -138,8 +138,8 @@ export default async function LeaguePage({ params, searchParams }: Props) {
         {/* Completed Games */}
         {completedGames.length > 0 && (
           <section className="mb-8">
-            <h2 className="text-xl font-bold mb-4">Final</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <h2 className="section-header">Final</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {completedGames.map((game) => (
                 <GameCard key={game.id} game={game} sport={sport} league={league} />
               ))}
@@ -148,9 +148,9 @@ export default async function LeaguePage({ params, searchParams }: Props) {
         )}
 
         {scoreboard.events.length === 0 && (
-          <div className="text-center py-12 text-gray-400">
-            <p className="text-xl">No games scheduled for this date</p>
-            <p className="mt-2">Try selecting a different date</p>
+          <div className="text-center py-16 text-neutral-500">
+            <p className="text-lg">No games scheduled for this date</p>
+            <p className="text-sm mt-2">Try selecting a different date</p>
           </div>
         )}
       </div>
@@ -175,102 +175,103 @@ function GameCard({ game, sport, league, isLive }: {
   return (
     <Link
       href={`/sport/${sport}/${league}/game/${game.id}`}
-      className={`bg-gray-800 hover:bg-gray-700 rounded-lg p-4 transition-all ${
-        isLive ? 'ring-2 ring-red-500' : ''
+      className={`block bg-neutral-900 hover:bg-neutral-800 rounded-lg border transition-all ${
+        isLive ? 'border-red-600/50 glow-red' : 'border-neutral-800 hover:border-neutral-700'
       }`}
     >
-      <div className="flex justify-between items-start mb-3">
-        <div className="text-sm text-gray-400">
+      {/* Game status bar */}
+      <div className="flex justify-between items-center px-4 py-2 border-b border-neutral-800">
+        <div className="text-xs">
           {isLive ? (
-            <span className="text-red-400 font-semibold">
-              {status.type.shortDetail}
-            </span>
+            <span className="status-live">{status.type.shortDetail}</span>
           ) : status.type.state === 'post' ? (
-            <span>Final</span>
+            <span className="status-final">Final</span>
           ) : (
-            <span>{formatGameTime(game.date)}</span>
+            <span className="status-scheduled">{formatGameTime(game.date)}</span>
           )}
         </div>
         {broadcasts.length > 0 && (
-          <div className="text-xs text-gray-500">
+          <div className="text-xs text-neutral-600">
             {broadcasts.join(', ')}
           </div>
         )}
       </div>
 
-      {/* Away Team */}
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-3">
-          {awayTeam?.team.logo && (
-            <img
-              src={getTeamLogo(awayTeam.team)}
-              alt={awayTeam.team.displayName}
-              className="w-8 h-8 object-contain"
-            />
-          )}
-          <div>
-            <span className={`font-semibold ${awayTeam?.winner ? 'text-white' : 'text-gray-300'}`}>
-              {awayTeam?.team.shortDisplayName || awayTeam?.team.displayName}
-            </span>
-            {awayTeam?.records?.[0] && (
-              <span className="text-gray-500 text-sm ml-2">
-                ({awayTeam.records[0].summary})
-              </span>
+      <div className="p-4">
+        {/* Away Team */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3">
+            {awayTeam?.team.logo && (
+              <img
+                src={getTeamLogo(awayTeam.team)}
+                alt={awayTeam.team.displayName}
+                className="w-8 h-8 object-contain"
+              />
             )}
-          </div>
-        </div>
-        <span className={`text-xl font-bold ${awayTeam?.winner ? 'text-white' : 'text-gray-400'}`}>
-          {awayTeam?.score || '-'}
-        </span>
-      </div>
-
-      {/* Home Team */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          {homeTeam?.team.logo && (
-            <img
-              src={getTeamLogo(homeTeam.team)}
-              alt={homeTeam.team.displayName}
-              className="w-8 h-8 object-contain"
-            />
-          )}
-          <div>
-            <span className={`font-semibold ${homeTeam?.winner ? 'text-white' : 'text-gray-300'}`}>
-              {homeTeam?.team.shortDisplayName || homeTeam?.team.displayName}
-            </span>
-            {homeTeam?.records?.[0] && (
-              <span className="text-gray-500 text-sm ml-2">
-                ({homeTeam.records[0].summary})
+            <div>
+              <span className={`team-name ${awayTeam?.winner ? 'text-white' : 'text-neutral-400'}`}>
+                {awayTeam?.team.shortDisplayName || awayTeam?.team.displayName}
               </span>
-            )}
-          </div>
-        </div>
-        <span className={`text-xl font-bold ${homeTeam?.winner ? 'text-white' : 'text-gray-400'}`}>
-          {homeTeam?.score || '-'}
-        </span>
-      </div>
-
-      {/* Game situation for football */}
-      {isLive && competition.situation && (
-        <div className="mt-3 pt-3 border-t border-gray-700 text-sm text-gray-400">
-          {competition.situation.downDistanceText && (
-            <div>{competition.situation.downDistanceText}</div>
-          )}
-          {competition.situation.lastPlay && (
-            <div className="text-xs mt-1 text-gray-500">
-              {competition.situation.lastPlay.text}
+              {awayTeam?.records?.[0] && (
+                <span className="team-record ml-2">
+                  {awayTeam.records[0].summary}
+                </span>
+              )}
             </div>
-          )}
+          </div>
+          <span className={`score-medium ${awayTeam?.winner ? 'text-white' : 'text-neutral-500'}`}>
+            {awayTeam?.score || '-'}
+          </span>
         </div>
-      )}
 
-      {/* Venue info */}
-      {competition.venue && status.type.state === 'pre' && (
-        <div className="mt-3 pt-3 border-t border-gray-700 text-xs text-gray-500">
-          {competition.venue.fullName}
-          {competition.venue.address?.city && ` - ${competition.venue.address.city}`}
+        {/* Home Team */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {homeTeam?.team.logo && (
+              <img
+                src={getTeamLogo(homeTeam.team)}
+                alt={homeTeam.team.displayName}
+                className="w-8 h-8 object-contain"
+              />
+            )}
+            <div>
+              <span className={`team-name ${homeTeam?.winner ? 'text-white' : 'text-neutral-400'}`}>
+                {homeTeam?.team.shortDisplayName || homeTeam?.team.displayName}
+              </span>
+              {homeTeam?.records?.[0] && (
+                <span className="team-record ml-2">
+                  {homeTeam.records[0].summary}
+                </span>
+              )}
+            </div>
+          </div>
+          <span className={`score-medium ${homeTeam?.winner ? 'text-white' : 'text-neutral-500'}`}>
+            {homeTeam?.score || '-'}
+          </span>
         </div>
-      )}
+
+        {/* Game situation for football */}
+        {isLive && competition.situation && (
+          <div className="mt-3 pt-3 border-t border-neutral-800 text-xs">
+            {competition.situation.downDistanceText && (
+              <div className="text-neutral-400">{competition.situation.downDistanceText}</div>
+            )}
+            {competition.situation.lastPlay && (
+              <div className="text-neutral-600 mt-1 truncate">
+                {competition.situation.lastPlay.text}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Venue info */}
+        {competition.venue && status.type.state === 'pre' && (
+          <div className="mt-3 pt-3 border-t border-neutral-800 text-xs text-neutral-600">
+            {competition.venue.fullName}
+            {competition.venue.address?.city && ` - ${competition.venue.address.city}`}
+          </div>
+        )}
+      </div>
     </Link>
   );
 }

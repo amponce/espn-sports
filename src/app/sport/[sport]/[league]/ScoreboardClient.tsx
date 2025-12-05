@@ -131,69 +131,67 @@ export function ScoreboardClient({ sport, league, currentDate, gameDates = [] }:
 
   return (
     <div className="mb-6">
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center gap-1 bg-gray-800 rounded-lg p-1">
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center bg-neutral-900 rounded-lg border border-neutral-800">
           <button
             onClick={() => navigateToGameDate('prev')}
             disabled={!hasPrevGame}
-            className="p-2 rounded-lg hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="p-2.5 hover:bg-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors rounded-l-lg border-r border-neutral-800"
             title="Previous game day"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-4 h-4" />
           </button>
           <input
             type="date"
             value={selectedDate}
             onChange={handleDateChange}
-            className="bg-transparent px-3 py-2 text-white text-center w-40"
+            className="bg-transparent px-3 py-2 text-white text-center w-36 text-sm border-none focus:outline-none"
           />
           <button
             onClick={() => navigateToGameDate('next')}
             disabled={!hasNextGame}
-            className="p-2 rounded-lg hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="p-2.5 hover:bg-neutral-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors rounded-r-lg border-l border-neutral-800"
             title="Next game day"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
         <button
           onClick={goToToday}
-          className="bg-red-700 hover:bg-red-600 px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+          className="btn-primary text-sm"
         >
           Today
         </button>
 
         <button
           onClick={handleRefresh}
-          className={`bg-gray-800 hover:bg-gray-700 p-2 rounded-lg transition-colors ${
-            refreshing ? 'opacity-50' : ''
-          }`}
+          className={`btn-secondary p-2.5 ${refreshing ? 'opacity-50' : ''}`}
           disabled={refreshing}
           title="Refresh"
         >
-          <RefreshCw className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
         </button>
 
         {parsedGameDates.length > 0 && (
           <button
             onClick={() => setShowCalendar(!showCalendar)}
-            className="bg-gray-800 hover:bg-gray-700 p-2 rounded-lg transition-colors"
+            className="btn-secondary p-2.5"
             title="Show game dates"
           >
-            <Calendar className="w-5 h-5" />
+            <Calendar className="w-4 h-4" />
           </button>
         )}
 
-        <div className="text-gray-500 text-sm ml-auto hidden md:block">
+        <div className="text-neutral-600 text-xs ml-auto hidden md:block">
           Auto-refreshes every 30s
         </div>
       </div>
 
       {/* Quick date picker for game dates */}
       {showCalendar && parsedGameDates.length > 0 && (
-        <div className="mt-4 bg-gray-800 rounded-lg p-4">
-          <h4 className="text-sm text-gray-400 mb-3">Game Dates</h4>
+        <div className="mt-4 bg-neutral-900 rounded-lg p-4 border border-neutral-800">
+          <h4 className="text-xs text-neutral-500 mb-3 font-medium uppercase tracking-wider">Game Dates</h4>
           <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto">
             {parsedGameDates.slice(-30).map((d) => {
               const formatted = `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`;
@@ -209,10 +207,10 @@ export function ScoreboardClient({ sport, league, currentDate, gameDates = [] }:
                     router.push(`/sport/${sport}/${league}?date=${d}`);
                     setShowCalendar(false);
                   }}
-                  className={`px-3 py-1 rounded text-sm transition-colors ${
+                  className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
                     isSelected
                       ? 'bg-red-600 text-white'
-                      : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+                      : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-white'
                   }`}
                 >
                   {label}

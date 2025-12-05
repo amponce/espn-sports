@@ -1,8 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  /* ESPN-inspired color palette */
+  --espn-red: #d00;
+  --espn-red-dark: #a00;
+  --espn-black: #000;
+  --espn-gray-900: #121212;
+  --espn-gray-800: #1a1a1a;
+  --espn-gray-700: #252525;
+  --espn-gray-600: #333;
+  --espn-gray-500: #555;
+  --espn-gray-400: #888;
+  --espn-gray-300: #aaa;
+  --espn-white: #fff;
+
+  --background: var(--espn-black);
+  --foreground: var(--espn-white);
+  --card-bg: var(--espn-gray-900);
+  --card-hover: var(--espn-gray-800);
+  --border-color: var(--espn-gray-700);
 }
 
 @theme inline {
@@ -15,34 +31,217 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Force dark mode */
 html {
   color-scheme: dark;
-}
-
-/* Smooth scrolling */
-html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar for dark theme */
+/* Modern card styles */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  background: var(--card-hover);
+  border-color: var(--espn-gray-600);
+  transform: translateY(-2px);
+}
+
+/* ESPN-style live indicator */
+.live-pulse {
+  animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-red {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Modern button styles */
+.btn-primary {
+  background: var(--espn-red);
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--espn-red-dark);
+}
+
+.btn-secondary {
+  background: var(--espn-gray-800);
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--espn-gray-700);
+  border-color: var(--espn-gray-500);
+}
+
+/* Score typography */
+.score-large {
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.score-medium {
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Team name styles */
+.team-name {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.team-record {
+  color: var(--espn-gray-400);
+  font-size: 0.75rem;
+}
+
+/* Section headers */
+.section-header {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--espn-gray-300);
+  border-bottom: 2px solid var(--espn-red);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1f2937;
+  background: var(--espn-gray-900);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4b5563;
+  background: var(--espn-gray-600);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
+  background: var(--espn-gray-500);
+}
+
+/* Tab navigation */
+.tab-nav {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tab-item {
+  padding: 0.75rem 1.25rem;
+  font-weight: 500;
+  color: var(--espn-gray-400);
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  margin-bottom: -1px;
+}
+
+.tab-item:hover {
+  color: var(--espn-white);
+}
+
+.tab-item.active {
+  color: var(--espn-white);
+  border-bottom-color: var(--espn-red);
+}
+
+/* Game status badges */
+.status-live {
+  background: var(--espn-red);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+}
+
+.status-final {
+  color: var(--espn-gray-400);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-scheduled {
+  color: var(--espn-gray-300);
+  font-size: 0.75rem;
+}
+
+/* ESPN-style gradient header */
+.header-gradient {
+  background: linear-gradient(180deg, var(--espn-gray-900) 0%, var(--espn-black) 100%);
+}
+
+/* Subtle glow effects */
+.glow-red {
+  box-shadow: 0 0 20px rgba(221, 0, 0, 0.3);
+}
+
+/* Input styles */
+input[type="date"] {
+  background: var(--espn-gray-800);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--espn-white);
+  padding: 0.5rem 0.75rem;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+/* Loading skeleton */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--espn-gray-800) 25%,
+    var(--espn-gray-700) 50%,
+    var(--espn-gray-800) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
