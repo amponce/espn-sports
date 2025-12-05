@@ -544,9 +544,103 @@ export async function getScoreboard(sport: string, league: string, date?: string
 }
 
 export async function getGameSummary(sport: string, league: string, eventId: string): Promise<GameSummary> {
+  // For MMA, the summary API doesn't work - we need to get data from the scoreboard
+  if (sport === 'mma') {
+    return getMMAEventSummary(league, eventId);
+  }
+
   const url = `${ESPN_WEB_API_BASE}/${sport}/${league}/summary?region=us&lang=en&contentorigin=espn&event=${eventId}`;
   const response = await axios.get<GameSummary>(url);
   return response.data;
+}
+
+// Fetch MMA event using the core API
+async function getMMAEventSummary(league: string, eventId: string): Promise<GameSummary> {
+  try {
+    // Get event details from core API
+    const eventUrl = `${ESPN_CORE_API}/mma/leagues/${league}/events/${eventId}`;
+    const eventResponse = await axios.get(eventUrl);
+    const eventData = eventResponse.data;
+
+    // Process competitions (fights) - they're inline in the response
+    const competitions: any[] = [];
+    if (eventData.competitions && Array.isArray(eventData.competitions)) {
+      for (const comp of eventData.competitions) {
+        // Get athlete details for each competitor
+        const competitors: any[] = [];
+        if (comp.competitors && Array.isArray(comp.competitors)) {
+          for (const competitor of comp.competitors) {
+            let athleteData: any = { id: competitor.id, displayName: 'TBD' };
+
+            // Fetch athlete details if available
+            if (competitor.athlete?.$ref) {
+              try {
+                const athleteResponse = await axios.get(competitor.athlete.$ref);
+                athleteData = athleteResponse.data;
+              } catch {}
+            }
+
+            competitors.push({
+              id: competitor.id,
+              uid: competitor.uid,
+              order: competitor.order,
+              winner: competitor.winner,
+              athlete: athleteData,
+            });
+          }
+        }
+
+        // Fetch status if it's a $ref
+        let status = { type: { state: 'pre', completed: false, shortDetail: 'Scheduled' } };
+        if (comp.status?.$ref) {
+          try {
+            const statusResponse = await axios.get(comp.status.$ref);
+            status = statusResponse.data;
+          } catch {}
+        } else if (comp.status) {
+          status = comp.status;
+        }
+
+        // Fetch venue if it's a $ref
+        let venue = comp.venue;
+        if (venue?.$ref && !venue.fullName) {
+          try {
+            const venueResponse = await axios.get(venue.$ref);
+            venue = venueResponse.data;
+          } catch {}
+        }
+
+        competitions.push({
+          id: comp.id,
+          date: comp.date,
+          status,
+          competitors,
+          venue,
+          type: comp.type,
+        });
+      }
+    }
+
+    return {
+      header: {
+        id: eventData.id,
+        competitions,
+        season: eventData.season,
+        league: {
+          id: '3321',
+          name: 'Ultimate Fighting Championship',
+          abbreviation: 'UFC',
+        },
+      },
+      gameInfo: {
+        venue: competitions[0]?.venue,
+      },
+      boxscore: {},
+    } as GameSummary;
+  } catch (error) {
+    console.error('Failed to fetch MMA event from core API:', error);
+    throw error;
+  }
 }
 
 export async function getTeams(sport: string, league: string): Promise<TeamsResponse> {
@@ -559,6 +653,72 @@ export async function getTeamInfo(sport: string, league: string, teamId: string)
   const url = `${ESPN_API_BASE}/${sport}/${league}/teams/${teamId}`;
   const response = await axios.get<{ team: TeamInfo }>(url);
   return response.data;
+}
+
+// Get athletes for individual sports (MMA, Golf, Tennis)
+export async function getAthletes(sport: string, league: string, limit: number = 100): Promise<AthletesResponse> {
+  try {
+    const url = `${ESPN_API_BASE}/${sport}/${league}/athletes?limit=${limit}`;
+    const response = await axios.get<AthletesResponse>(url);
+    return response.data;
+  } catch (error) {
+    console.error(`Failed to fetch athletes for ${sport}/${league}:`, error);
+    return { items: [], athletes: [] };
+  }
+}
+
+export async function getAthleteInfo(sport: string, league: string, athleteId: string): Promise<AthleteInfo> {
+  const url = `${ESPN_API_BASE}/${sport}/${league}/athletes/${athleteId}`;
+  const response = await axios.get<AthleteInfo>(url);
+  return response.data;
+}
+
+// Types for athletes
+export interface AthletesResponse {
+  sports?: Array<{
+    leagues?: Array<{
+      athletes?: Athlete[];
+    }>;
+  }>;
+  items?: Athlete[];
+  athletes?: Athlete[];
+  count?: number;
+  pageIndex?: number;
+  pageSize?: number;
+  pageCount?: number;
+}
+
+export interface Athlete {
+  id: string;
+  uid?: string;
+  guid?: string;
+  displayName: string;
+  shortName?: string;
+  firstName?: string;
+  lastName?: string;
+  fullName?: string;
+  weight?: number;
+  height?: number;
+  age?: number;
+  citizenship?: string;
+  flag?: { href: string };
+  headshot?: { href: string; alt?: string };
+  position?: { name: string; abbreviation: string };
+  team?: { id: string; name: string; logo?: string };
+  statistics?: any[];
+  record?: string;
+  ranks?: any[];
+}
+
+export interface AthleteInfo extends Athlete {
+  bio?: string;
+  birthPlace?: { city?: string; state?: string; country?: string };
+  college?: { name: string };
+  draft?: { year: number; round: number; selection: number };
+  experience?: { years: number };
+  status?: { type: string; name: string };
+  injuries?: any[];
+  contracts?: any[];
 }
 
 export async function getTeamSchedule(sport: string, league: string, teamId: string): Promise<unknown> {

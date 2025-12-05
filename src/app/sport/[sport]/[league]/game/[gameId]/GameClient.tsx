@@ -41,25 +41,6 @@ export function GameClient({ sport, league, gameId, isLive, gameSummary }: Props
 
   return (
     <div>
-      {/* Rap Recap Generator Link - Only show for completed games */}
-      {isCompleted && (
-        <div className="mb-6">
-          <Link
-            href={`/sport/${sport}/${league}/game/${gameId}/recap`}
-            className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-6 py-3 rounded-xl font-bold transition-all transform hover:scale-105"
-          >
-            <span className="text-2xl">🎤</span>
-            <span>Generate AI Rap Recap</span>
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </Link>
-          <p className="text-gray-500 text-sm mt-2">
-            Create a 60-second rap recap of this game for your content
-          </p>
-        </div>
-      )}
-
       {/* Tabs */}
       <div className="flex gap-2 mb-6 border-b border-gray-700 overflow-x-auto">
         {tabs.filter(t => t.available).map((tab) => (
@@ -81,7 +62,7 @@ export function GameClient({ sport, league, gameId, isLive, gameSummary }: Props
       {activeTab === 'boxscore' && <BoxScoreTab gameSummary={gameSummary} />}
       {activeTab === 'plays' && <PlaysTab gameSummary={gameSummary} />}
       {activeTab === 'videos' && <VideosTab gameSummary={gameSummary} gameId={gameId} />}
-      {activeTab === 'info' && <GameInfoTab gameSummary={gameSummary} />}
+      {activeTab === 'info' && <GameInfoTab gameSummary={gameSummary} sport={sport} league={league} gameId={gameId} isCompleted={isCompleted} />}
     </div>
   );
 }
@@ -179,29 +160,52 @@ function BoxScoreTab({ gameSummary }: { gameSummary: GameSummary }) {
         </div>
       ))}
 
-      {/* Game Leaders */}
+      {/* Game Leaders - ESPN API returns leaders by team, then by stat category */}
       {gameSummary.leaders && gameSummary.leaders.length > 0 && (
         <div className="bg-gray-800 rounded-lg p-6">
           <h3 className="text-xl font-bold mb-4">Game Leaders</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {gameSummary.leaders.map((leader, i) => (
-              <div key={i} className="bg-gray-700/50 rounded-lg p-4">
-                <h4 className="text-sm text-gray-400 mb-2">{leader.displayName}</h4>
-                {leader.leaders?.[0] && (
-                  <div className="flex items-center gap-3">
-                    {leader.leaders[0].athlete?.headshot?.href && (
-                      <img
-                        src={leader.leaders[0].athlete.headshot.href}
-                        alt=""
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                    )}
-                    <div>
-                      <div className="font-semibold">{leader.leaders[0].athlete?.displayName}</div>
-                      <div className="text-xl font-bold text-red-400">{leader.leaders[0].displayValue}</div>
+          <div className="space-y-6">
+            {gameSummary.leaders.map((teamLeaders: any, teamIndex: number) => (
+              <div key={teamIndex}>
+                {/* Team header */}
+                <div className="flex items-center gap-3 mb-4">
+                  {teamLeaders.team?.logo && (
+                    <img
+                      src={teamLeaders.team.logo}
+                      alt={teamLeaders.team.displayName}
+                      className="w-8 h-8 object-contain"
+                    />
+                  )}
+                  <h4 className="text-lg font-semibold">{teamLeaders.team?.displayName || `Team ${teamIndex + 1}`}</h4>
+                </div>
+                {/* Stat categories for this team */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {teamLeaders.leaders?.map((statCategory: any, statIndex: number) => (
+                    <div key={statIndex} className="bg-gray-700/50 rounded-lg p-4">
+                      <h5 className="text-sm text-gray-400 mb-2">{statCategory.displayName}</h5>
+                      {statCategory.leaders?.[0] && (
+                        <div className="flex items-center gap-3">
+                          {statCategory.leaders[0].athlete?.headshot?.href && (
+                            <img
+                              src={statCategory.leaders[0].athlete.headshot.href}
+                              alt=""
+                              className="w-12 h-12 rounded-full object-cover"
+                            />
+                          )}
+                          <div>
+                            <div className="font-semibold text-sm">{statCategory.leaders[0].athlete?.displayName}</div>
+                            <div className="text-lg font-bold text-red-400">
+                              {statCategory.leaders[0].mainStat?.value || statCategory.leaders[0].displayValue}
+                            </div>
+                            {statCategory.leaders[0].summary && (
+                              <div className="text-xs text-gray-500">{statCategory.leaders[0].summary}</div>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                )}
+                  ))}
+                </div>
               </div>
             ))}
           </div>
@@ -457,7 +461,7 @@ function VideosTab({ gameSummary, gameId }: { gameSummary: GameSummary; gameId: 
   );
 }
 
-function GameInfoTab({ gameSummary }: { gameSummary: GameSummary }) {
+function GameInfoTab({ gameSummary, sport, league, gameId, isCompleted }: { gameSummary: GameSummary; sport: string; league: string; gameId: string; isCompleted?: boolean }) {
   const gameInfo = gameSummary.gameInfo;
   const header = gameSummary.header;
   const pickcenter = gameSummary.pickcenter;
@@ -465,6 +469,28 @@ function GameInfoTab({ gameSummary }: { gameSummary: GameSummary }) {
 
   return (
     <div className="space-y-6">
+      {/* AI Rap Recap Generator - Only show for completed games */}
+      {isCompleted && (
+        <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-lg p-6 border border-purple-500/30">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <h3 className="text-xl font-bold mb-1">AI Rap Recap</h3>
+              <p className="text-gray-400 text-sm">Generate a 60-second rap recap of this game for your content</p>
+            </div>
+            <Link
+              href={`/sport/${sport}/${league}/game/${gameId}/recap`}
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-6 py-3 rounded-xl font-bold transition-all transform hover:scale-105"
+            >
+              <span className="text-2xl">🎤</span>
+              <span>Generate Rap Recap</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* Venue Info */}
       {gameInfo?.venue && (
         <div className="bg-gray-800 rounded-lg p-6">

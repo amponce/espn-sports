@@ -33,41 +33,35 @@ export default async function TeamsPage({ params }: Props) {
   const teams = teamsData.sports?.[0]?.leagues?.[0]?.teams || [];
 
   return (
-    <main className="min-h-screen bg-gray-900 text-white">
-      <header className="bg-gradient-to-r from-red-700 to-red-900 py-6 px-4">
-        <div className="max-w-7xl mx-auto">
-          <Link href={`/sport/${sport}/${league}`} className="text-red-200 hover:text-white text-sm mb-2 inline-block">
-            &larr; Back to {leagueConfig.name}
+    <main className="min-h-screen bg-black text-white">
+      <header className="border-b border-neutral-800">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <Link
+            href={`/sport/${sport}/${league}`}
+            className="text-neutral-500 hover:text-white text-xs mb-3 inline-flex items-center gap-1 transition-colors"
+          >
+            <span>&larr;</span> Back to {leagueConfig.name}
           </Link>
           <div className="flex items-center gap-4">
-            <span className="text-5xl">{sportConfig.icon}</span>
+            <span className="text-4xl">{sportConfig.icon}</span>
             <div>
-              <h1 className="text-4xl font-bold">{leagueConfig.name} Teams</h1>
-              <p className="text-red-200">{teams.length} teams</p>
+              <h1 className="text-2xl font-bold tracking-tight">{leagueConfig.name} Teams</h1>
+              <p className="text-neutral-500 text-sm">{teams.length} teams</p>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Navigation tabs */}
-        <div className="flex gap-4 mb-8 border-b border-gray-700">
-          <Link
-            href={`/sport/${sport}/${league}`}
-            className="pb-2 px-4 border-b-2 border-transparent text-gray-400 hover:text-white"
-          >
-            Scoreboard
+        <div className="tab-nav mb-6">
+          <Link href={`/sport/${sport}/${league}`} className="tab-item">
+            Scores
           </Link>
-          <Link
-            href={`/sport/${sport}/${league}/teams`}
-            className="pb-2 px-4 border-b-2 border-red-500 text-white font-semibold"
-          >
+          <Link href={`/sport/${sport}/${league}/teams`} className="tab-item active">
             Teams
           </Link>
-          <Link
-            href={`/sport/${sport}/${league}/news`}
-            className="pb-2 px-4 border-b-2 border-transparent text-gray-400 hover:text-white"
-          >
+          <Link href={`/sport/${sport}/${league}/news`} className="tab-item">
             News
           </Link>
         </div>
@@ -77,9 +71,10 @@ export default async function TeamsPage({ params }: Props) {
             <Link
               key={team.id}
               href={`/sport/${sport}/${league}/teams/${team.id}`}
-              className="bg-gray-800 hover:bg-gray-700 rounded-lg p-4 transition-all duration-200 hover:scale-105 text-center"
+              className="bg-neutral-900 hover:bg-neutral-800 rounded-lg p-4 transition-all border border-neutral-800 hover:border-neutral-700 text-center group"
               style={{
-                borderBottom: team.color ? `4px solid #${team.color}` : undefined,
+                borderBottomColor: team.color ? `#${team.color}` : undefined,
+                borderBottomWidth: team.color ? '3px' : undefined,
               }}
             >
               <img
@@ -87,18 +82,20 @@ export default async function TeamsPage({ params }: Props) {
                 alt={team.displayName}
                 className="w-16 h-16 object-contain mx-auto mb-3"
               />
-              <h3 className="font-semibold text-sm">{team.shortDisplayName || team.displayName}</h3>
-              <p className="text-gray-500 text-xs mt-1">{team.abbreviation}</p>
+              <h3 className="font-semibold text-sm group-hover:text-white transition-colors">
+                {team.shortDisplayName || team.displayName}
+              </h3>
+              <p className="text-neutral-500 text-xs mt-1">{team.abbreviation}</p>
               {team.record?.items?.[0] && (
-                <p className="text-gray-400 text-xs mt-1">{team.record.items[0].summary}</p>
+                <p className="text-neutral-400 text-xs mt-1">{team.record.items[0].summary}</p>
               )}
             </Link>
           ))}
         </div>
 
         {teams.length === 0 && (
-          <div className="text-center py-12 text-gray-400">
-            <p>No teams found for this league</p>
+          <div className="text-center py-16 text-neutral-500">
+            <p className="text-lg">No teams found for this league</p>
           </div>
         )}
       </div>

@@ -2,15 +2,15 @@
 export const leagueLogos: Record<string, string> = {
   // Football
   nfl: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nfl.png',
-  'college-football': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/ncaa/500/ncaa.png',
+  'college-football': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/ncaa.png',
   xfl: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/xfl.png',
   cfl: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/cfl.png',
 
   // Basketball
   nba: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nba.png',
   wnba: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/wnba.png',
-  'mens-college-basketball': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/ncaa/500/ncaa.png',
-  'womens-college-basketball': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/ncaa/500/ncaa.png',
+  'mens-college-basketball': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/ncaa.png',
+  'womens-college-basketball': 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/ncaa.png',
 
   // Baseball
   mlb: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/mlb.png',

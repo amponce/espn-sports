@@ -11,6 +11,36 @@ interface Props {
   gameDates?: (string | { date?: string })[]; // Array of dates with games (YYYYMMDD format, ISO strings, or objects)
 }
 
+// Get nearby game dates centered around current date
+function getNearbyDates(allDates: string[], currentDate: string): string[] {
+  const currentIndex = allDates.indexOf(currentDate);
+  const today = new Date().toISOString().split('T')[0].replace(/-/g, '');
+
+  // Find dates around the current selection
+  let startIndex: number;
+  let endIndex: number;
+
+  if (currentIndex === -1) {
+    // Current date not in list, find nearest future dates
+    const futureIndex = allDates.findIndex(d => d >= today);
+    if (futureIndex === -1) {
+      // All dates are in the past, show last 7
+      startIndex = Math.max(0, allDates.length - 7);
+      endIndex = allDates.length;
+    } else {
+      // Show 3 past, current position, and 3 future
+      startIndex = Math.max(0, futureIndex - 3);
+      endIndex = Math.min(allDates.length, futureIndex + 4);
+    }
+  } else {
+    // Show 3 before and 3 after current selection
+    startIndex = Math.max(0, currentIndex - 3);
+    endIndex = Math.min(allDates.length, currentIndex + 4);
+  }
+
+  return allDates.slice(startIndex, endIndex);
+}
+
 export function ScoreboardClient({ sport, league, currentDate, gameDates = [] }: Props) {
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
@@ -176,24 +206,61 @@ export function ScoreboardClient({ sport, league, currentDate, gameDates = [] }:
         {parsedGameDates.length > 0 && (
           <button
             onClick={() => setShowCalendar(!showCalendar)}
-            className="btn-secondary p-2.5"
-            title="Show game dates"
+            className={`btn-secondary p-2.5 ${showCalendar ? 'bg-neutral-700 border-neutral-600' : ''}`}
+            title={showCalendar ? 'Hide game dates' : 'Show all game dates'}
           >
             <Calendar className="w-4 h-4" />
           </button>
         )}
 
         <div className="text-neutral-600 text-xs ml-auto hidden md:block">
-          Auto-refreshes every 30s
+          {parsedGameDates.length > 0
+            ? `${parsedGameDates.length} game days • Auto-refresh 30s`
+            : 'Auto-refreshes every 30s'
+          }
         </div>
       </div>
 
-      {/* Quick date picker for game dates */}
+      {/* Nearby game dates - always show a few */}
+      {parsedGameDates.length > 0 && (
+        <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-2">
+          <span className="text-xs text-neutral-600 whitespace-nowrap">Jump to:</span>
+          {getNearbyDates(parsedGameDates, currentDateYYYYMMDD).map((d) => {
+            const formatted = `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`;
+            const isSelected = d === currentDateYYYYMMDD;
+            const date = new Date(formatted);
+            const today = new Date().toISOString().split('T')[0].replace(/-/g, '');
+            const isToday = d === today;
+            const label = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+
+            return (
+              <button
+                key={d}
+                onClick={() => {
+                  setSelectedDate(formatted);
+                  router.push(`/sport/${sport}/${league}?date=${d}`);
+                }}
+                className={`px-3 py-1.5 rounded text-xs font-medium whitespace-nowrap transition-colors ${
+                  isSelected
+                    ? 'bg-red-600 text-white'
+                    : isToday
+                    ? 'bg-green-900/50 text-green-400 hover:bg-green-900'
+                    : 'bg-neutral-800 hover:bg-neutral-700 text-neutral-400 hover:text-white'
+                }`}
+              >
+                {isToday ? `Today` : label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Full calendar - expandable */}
       {showCalendar && parsedGameDates.length > 0 && (
-        <div className="mt-4 bg-neutral-900 rounded-lg p-4 border border-neutral-800">
-          <h4 className="text-xs text-neutral-500 mb-3 font-medium uppercase tracking-wider">Game Dates</h4>
+        <div className="mt-3 bg-neutral-900 rounded-lg p-4 border border-neutral-800">
+          <h4 className="text-xs text-neutral-500 mb-3 font-medium uppercase tracking-wider">All Game Dates</h4>
           <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto">
-            {parsedGameDates.slice(-30).map((d) => {
+            {parsedGameDates.map((d) => {
               const formatted = `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`;
               const isSelected = d === currentDateYYYYMMDD;
               const date = new Date(formatted);

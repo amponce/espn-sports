@@ -88,14 +88,14 @@ export default async function LeaguePage({ params, searchParams }: Props) {
             href={`/sport/${sport}/${league}`}
             className="tab-item active"
           >
-            {isGolf ? 'Leaderboard' : 'Scores'}
+            {isGolf ? 'Leaderboard' : isMMA ? 'Events' : 'Scores'}
           </Link>
-          {!isGolf && (
+          {!isMMA && (
             <Link
-              href={`/sport/${sport}/${league}/teams`}
+              href={`/sport/${sport}/${league}/${isGolf ? 'players' : 'teams'}`}
               className="tab-item"
             >
-              {isMMA ? 'Fighters' : 'Teams'}
+              {isGolf ? 'Players' : 'Teams'}
             </Link>
           )}
           <Link

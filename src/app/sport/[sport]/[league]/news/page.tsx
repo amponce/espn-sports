@@ -32,51 +32,54 @@ export default async function NewsPage({ params }: Props) {
 
   const articles = newsData.articles || [];
 
+  // Determine the correct nav links based on sport type
+  const isMMA = sport === 'mma';
+  const isGolf = sport === 'golf';
+  const secondTabLink = isMMA ? 'fighters' : isGolf ? 'players' : 'teams';
+  const secondTabLabel = isMMA ? 'Fighters' : isGolf ? 'Players' : 'Teams';
+  const firstTabLabel = isGolf ? 'Leaderboard' : isMMA ? 'Events' : 'Scores';
+
   return (
-    <main className="min-h-screen bg-gray-900 text-white">
-      <header className="bg-gradient-to-r from-red-700 to-red-900 py-6 px-4">
-        <div className="max-w-7xl mx-auto">
-          <Link href={`/sport/${sport}/${league}`} className="text-red-200 hover:text-white text-sm mb-2 inline-block">
-            &larr; Back to {leagueConfig.name}
+    <main className="min-h-screen bg-black text-white">
+      <header className="border-b border-neutral-800">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <Link
+            href={`/sport/${sport}/${league}`}
+            className="text-neutral-500 hover:text-white text-xs mb-3 inline-flex items-center gap-1 transition-colors"
+          >
+            <span>&larr;</span> Back to {leagueConfig.name}
           </Link>
           <div className="flex items-center gap-4">
-            <span className="text-5xl">{sportConfig.icon}</span>
+            <span className="text-4xl">{sportConfig.icon}</span>
             <div>
-              <h1 className="text-4xl font-bold">{leagueConfig.name} News</h1>
-              <p className="text-red-200">{newsData.header || 'Latest headlines'}</p>
+              <h1 className="text-2xl font-bold tracking-tight">{leagueConfig.name} News</h1>
+              <p className="text-neutral-500 text-sm">{newsData.header || 'Latest headlines'}</p>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Navigation tabs */}
-        <div className="flex gap-4 mb-8 border-b border-gray-700">
-          <Link
-            href={`/sport/${sport}/${league}`}
-            className="pb-2 px-4 border-b-2 border-transparent text-gray-400 hover:text-white"
-          >
-            Scoreboard
+        <div className="tab-nav mb-6">
+          <Link href={`/sport/${sport}/${league}`} className="tab-item">
+            {firstTabLabel}
           </Link>
-          <Link
-            href={`/sport/${sport}/${league}/teams`}
-            className="pb-2 px-4 border-b-2 border-transparent text-gray-400 hover:text-white"
-          >
-            Teams
-          </Link>
-          <Link
-            href={`/sport/${sport}/${league}/news`}
-            className="pb-2 px-4 border-b-2 border-red-500 text-white font-semibold"
-          >
+          {!isMMA && (
+            <Link href={`/sport/${sport}/${league}/${secondTabLink}`} className="tab-item">
+              {secondTabLabel}
+            </Link>
+          )}
+          <Link href={`/sport/${sport}/${league}/news`} className="tab-item active">
             News
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {articles.map((article, i) => (
             <article
               key={i}
-              className="bg-gray-800 rounded-lg overflow-hidden hover:bg-gray-700/80 transition-colors"
+              className="bg-neutral-900 rounded-lg overflow-hidden hover:bg-neutral-800 transition-colors border border-neutral-800 hover:border-neutral-700"
             >
               {article.images?.[0] && (
                 <img
@@ -86,14 +89,14 @@ export default async function NewsPage({ params }: Props) {
                 />
               )}
               <div className="p-4">
-                <h2 className="text-lg font-semibold mb-2">{article.headline}</h2>
+                <h2 className="text-base font-semibold mb-2">{article.headline}</h2>
                 {article.description && (
-                  <p className="text-gray-400 text-sm mb-3 line-clamp-2">
+                  <p className="text-neutral-400 text-sm mb-3 line-clamp-2">
                     {article.description}
                   </p>
                 )}
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-500 text-xs">
+                  <span className="text-neutral-500 text-xs">
                     {new Date(article.published).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
@@ -105,7 +108,7 @@ export default async function NewsPage({ params }: Props) {
                       href={article.links.web.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-red-400 hover:text-red-300 text-sm"
+                      className="text-red-500 hover:text-red-400 text-sm"
                     >
                       Read More &rarr;
                     </a>
@@ -116,7 +119,7 @@ export default async function NewsPage({ params }: Props) {
                     {article.categories.slice(0, 3).map((cat, j) => (
                       <span
                         key={j}
-                        className="bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded"
+                        className="bg-neutral-800 text-neutral-400 text-xs px-2 py-1 rounded"
                       >
                         {cat.description}
                       </span>
@@ -129,8 +132,8 @@ export default async function NewsPage({ params }: Props) {
         </div>
 
         {articles.length === 0 && (
-          <div className="text-center py-12 text-gray-400">
-            <p>No news articles available</p>
+          <div className="text-center py-16 text-neutral-500">
+            <p className="text-lg">No news articles available</p>
           </div>
         )}
       </div>
