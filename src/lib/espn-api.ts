@@ -45,13 +45,31 @@ export const SPORTS_CONFIG = {
     name: 'Soccer',
     icon: '⚽',
     leagues: {
-      'usa.1': { name: 'MLS', slug: 'usa.1' },
+      // Top European Leagues
       'eng.1': { name: 'Premier League', slug: 'eng.1' },
       'esp.1': { name: 'La Liga', slug: 'esp.1' },
       'ger.1': { name: 'Bundesliga', slug: 'ger.1' },
       'ita.1': { name: 'Serie A', slug: 'ita.1' },
       'fra.1': { name: 'Ligue 1', slug: 'fra.1' },
-      'uefa.champions': { name: 'UEFA Champions League', slug: 'uefa.champions' },
+      // UEFA Competitions
+      'uefa.champions': { name: 'Champions League', slug: 'uefa.champions' },
+      'uefa.europa': { name: 'Europa League', slug: 'uefa.europa' },
+      'uefa.europa.conf': { name: 'Conference League', slug: 'uefa.europa.conf' },
+      // Americas
+      'usa.1': { name: 'MLS', slug: 'usa.1' },
+      'mex.1': { name: 'Liga MX', slug: 'mex.1' },
+      'bra.1': { name: 'Brasileirao', slug: 'bra.1' },
+      'arg.1': { name: 'Liga Argentina', slug: 'arg.1' },
+      'concacaf.champions': { name: 'CONCACAF Champions', slug: 'concacaf.champions' },
+      'conmebol.libertadores': { name: 'Copa Libertadores', slug: 'conmebol.libertadores' },
+      // Other European
+      'eng.2': { name: 'Championship', slug: 'eng.2' },
+      'ned.1': { name: 'Eredivisie', slug: 'ned.1' },
+      'por.1': { name: 'Primeira Liga', slug: 'por.1' },
+      'sco.1': { name: 'Scottish Premiership', slug: 'sco.1' },
+      // International
+      'fifa.world': { name: 'FIFA World Cup', slug: 'fifa.world' },
+      'uefa.euro': { name: 'UEFA Euro', slug: 'uefa.euro' },
     },
   },
   mma: {

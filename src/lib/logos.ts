@@ -18,16 +18,31 @@ export const leagueLogos: Record<string, string> = {
   // Hockey
   nhl: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nhl.png',
 
-  // Soccer
-  eng1: 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/23.png', // Premier League
-  eng2: 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/24.png', // Championship
-  esp1: 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/15.png', // La Liga
-  ger1: 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/10.png', // Bundesliga
-  ita1: 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/12.png', // Serie A
-  fra1: 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/9.png',  // Ligue 1
-  mls: 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/19.png',  // MLS
-  uefa: 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/2.png',  // Champions League
-  fifa: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/countries/500/fifa.png',
+  // Soccer - European Top Leagues
+  'eng.1': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/23.png',
+  'esp.1': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/15.png',
+  'ger.1': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/10.png',
+  'ita.1': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/12.png',
+  'fra.1': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/9.png',
+  // Soccer - UEFA Competitions
+  'uefa.champions': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/2.png',
+  'uefa.europa': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/35.png',
+  'uefa.europa.conf': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/35.png',
+  'uefa.euro': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png',
+  // Soccer - Americas
+  'usa.1': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/19.png',
+  'mex.1': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/22.png',
+  'bra.1': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/85.png',
+  'arg.1': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/1.png',
+  'concacaf.champions': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/28.png',
+  'conmebol.libertadores': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/5.png',
+  // Soccer - Other European
+  'eng.2': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/24.png',
+  'ned.1': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/11.png',
+  'por.1': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/14.png',
+  'sco.1': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/43.png',
+  // Soccer - International
+  'fifa.world': 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png',
 
   // MMA
   ufc: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/ufc.png',
