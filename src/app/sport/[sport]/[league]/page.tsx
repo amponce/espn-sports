@@ -32,11 +32,11 @@ export default async function LeaguePage({ params, searchParams }: Props) {
     scoreboard = await getScoreboard(sport, league, date);
   } catch (error) {
     console.error('Failed to fetch scoreboard:', error);
-    scoreboard = { events: [], leagues: [], calendar: [] };
+    scoreboard = { events: [], leagues: [] };
   }
 
   // Extract game dates from calendar for smart navigation
-  const gameDates = scoreboard.leagues?.[0]?.calendar || scoreboard.calendar || [];
+  const gameDates = scoreboard.leagues?.[0]?.calendar || [];
 
   const liveGames = scoreboard.events.filter((game) =>
     game.competitions[0]?.status?.type?.state === 'in'
